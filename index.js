@@ -1,60 +1,15 @@
 var express = require('express')
 var bodyParser = require('body-parser')
 var request = require('request')
+var token = 'EAAIwxSzOriIBACzvs1SsEZCq0tFmXHSDTs3smxARByXtVakr9MJ0rRuQ2RZAkxv8rO79CIcZCs0Kbds7ywTqsMkLQjXZAMT7ppDKcXbzc9P9ZCFpBaPcvN9TsXH8x274f5c5pM3IuxGZCcZCVnAKP36rtcnGC5Ykgdyg1EzVZAjNiAZDZD'
+
 var app = express()
 
 app.use(bodyParser.json())
 
 app.get('/', function (req, res) {
-  res.send('Hello')
+  res.send('test')
 })
-
-app.get('/webhook/', function (req, res) {
-  if (req.query['hub.verify_token'] === 'checkbot') {
-    res.send(req.query['hub.challenge'])
-  }
-  res.send('Error, wrong validation token')
-})
-
-app.post('/webhook/', function (req, res) {
-  var messaging_events = req.body.entry[0].messaging
-  for (var i = 0; i < messaging_events.length; i++) {
-    var event = req.body.entry[0].messaging[i]
-    var sender = event.sender.id
-    if (event.message && event.message.text) {
-      var text = event.message.text
-      console.log(text, sender)
-      var Textar = text.split(' ')
-      if (Textar[0] === 'sum') {
-        var sum = parseInt(Textar[1]) + parseInt(Textar[2])
-        sendTextMessage(sender, sum + '')
-      } else if (Textar[0] === 'max') {
-        if (parseInt(Textar[1]) > parseInt(Textar[2])) {
-          sendTextMessage(sender, Textar[1])
-        } else {
-          sendTextMessage(sender, Textar[2])
-        }
-      } else if (Textar[0] === 'min') {
-        if (parseInt(Textar[1]) < parseInt(Textar[2])) {
-          sendTextMessage(sender, Textar[1])
-        } else {
-          sendTextMessage(sender, Textar[2])
-        }
-      } else if (Textar[0] === 'avg') {
-        var avgSum = 0
-        for (var b = 1; b < arrText.length; b++) {
-          avgSum = avgSum + parseInt(Textar[b])
-        }
-        var avg = avgSum / (arrText.length - 1)
-        sendTextMessage(sender, avg)
-      }
-    }
-  }
-  res.sendStatus(200)
-})
-
-var token = 'EAAIwxSzOriIBACzvs1SsEZCq0tFmXHSDTs3smxARByXtVakr9MJ0rRuQ2RZAkxv8rO79CIcZCs0Kbds7ywTqsMkLQjXZAMT7ppDKcXbzc9P9ZCFpBaPcvN9TsXH8x274f5c5pM3IuxGZCcZCVnAKP36rtcnGC5Ykgdyg1EzVZAjNiAZDZD'
-
 function sendTextMessage (sender, text) {
   var messageData = {
     text: text
@@ -75,6 +30,52 @@ function sendTextMessage (sender, text) {
     }
   })
 }
+app.get('/webhook/', function (req, res) {
+  if (req.query['hub.verify_token'] === 'checkbot') {
+    res.send(req.query['hub.challenge'])
+  }
+  res.send('Error, wrong validation token')
+})
+
+app.post('/webhook/', function (req, res) {
+  var messaging_events = req.body.entry[0].messaging
+  for (var i = 0; i < messaging_events.length; i++) {
+    var event = req.body.entry[0].messaging[i]
+    var sender = event.sender.id
+    if (event.message && event.message.text) {
+      var text = event.message.text
+      console.log(text, sender)
+      var arrText = text.split(' ')
+      if (arrText[0] === 'sum') {
+        var sum = parseInt(arrText[1]) + parseInt(arrText[2])
+        sendTextMessage(sender, sum + '')
+      } else if (arrText[0] === 'max') {
+        if (parseInt(arrText[1]) > parseInt(arrText[2])) {
+          sendTextMessage(sender, arrText[1])
+        } else {
+          sendTextMessage(sender, arrText[2])
+        }
+      } else if (arrText[0] === 'min') {
+        if (parseInt(arrText[1]) < parseInt(arrText[2])) {
+          sendTextMessage(sender, arrText[1])
+        } else {
+          sendTextMessage(sender, arrText[2])
+        }
+      } else if (arrText[0] === 'avg') {
+        var avgSum = 0
+        for (var b = 1; b < arrText.length; b++) {
+          avgSum = avgSum + parseInt(arrText[b])
+        }
+        var avg = avgSum / (arrText.length - 1)
+        sendTextMessage(sender, avg)
+      }
+    }
+  }
+  res.sendStatus(200)
+})
+
+
+
 
 app.set('port', (process.env.PORT || 5000))
 
