@@ -2,12 +2,13 @@ var express = require('express')
 var bodyParser = require('body-parser')
 var request = require('request')
 var token = 'EAAIwxSzOriIBAKCK0l4wB8vMgfLuC9gChxW6PVhco3UM1ZAGAzpWmI48x3AveOjrUdN5IhZChE6ythZAMnesrswUcmzQugZCqoNk14oZCyzpOW7g6EwLko2LgomZCsAPZCzSlqMHZARZAUrKlckWW4YE7sC4RZCeR8qWnlcOQnZApe9UQZDZD'
+
 var app = express()
 
 app.use(bodyParser.json())
 
 app.get('/', function (req, res) {
-  res.send('test')
+  res.send('testbot')
 })
 function sendTextMessage (sender, text) {
   var messageData = {
@@ -30,7 +31,7 @@ function sendTextMessage (sender, text) {
   })
 }
 app.get('/webhook/', function (req, res) {
-  if (req.query['hub.verify_token'] === 'checkbot') {
+  if (req.query['hub.verify_token'] === 'bbiiggppoonnggssaattoorrnn') {
     res.send(req.query['hub.challenge'])
   }
   res.send('Error, wrong validation token')
@@ -72,7 +73,6 @@ app.post('/webhook/', function (req, res) {
   }
   res.sendStatus(200)
 })
-
 app.set('port', (process.env.PORT || 5000))
 
 app.listen(app.get('port'), function () {
