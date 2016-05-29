@@ -25,9 +25,6 @@ function sendTextMessage(sender, text) {
 }
 app.use(bodyParser.json())
 
-app.get('/',function(req,res){
-  res.send('Hello World');
-})
 app.get('/webhook', function (req, res) {
   if (req.query['hub.verify_token'] === 'checkbot') {
     res.send(req.query['hub.challenge']);
