@@ -1,35 +1,13 @@
 var express = require('express')
 var bodyParser = require('body-parser')
 var request = require('request')
-var token = 'EAAIwxSzOriIBACzvs1SsEZCq0tFmXHSDTs3smxARByXtVakr9MJ0rRuQ2RZAkxv8rO79CIcZCs0Kbds7ywTqsMkLQjXZAMT7ppDKcXbzc9P9ZCFpBaPcvN9TsXH8x274f5c5pM3IuxGZCcZCVnAKP36rtcnGC5Ykgdyg1EzVZAjNiAZDZD'
 var app = express()
 
 app.use(bodyParser.json())
 
 app.get('/', function (req, res) {
-  res.send('test')
+  res.send('Hello')
 })
-function sendTextMessage (sender, text) {
-  var messageData = {
-    text: text
-  }
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: { access_token: token },
-    method: 'POST',
-    json: {
-      recipient: { id: sender },
-      message: messageData
-    }
-  }, function (error, response, body) {
-    if (error) {
-      console.log('Error sending message: ', error)
-    } else if (response.body.error) {
-      console.log('Error: ', response.body.error)
-    }
-  })
-}
-
 
 app.get('/webhook/', function (req, res) {
   if (req.query['hub.verify_token'] === 'checkbot') {
@@ -63,11 +41,11 @@ app.post('/webhook/', function (req, res) {
           sendTextMessage(sender, Textar[2])
         }
       } else if (Textar[0] === 'avg') {
-        var avgofsum = 0
+        var avgSum = 0
         for (var b = 1; b < arrText.length; b++) {
-          avgSum = avgofsum + parseInt(Textar[b])
+          avgSum = avgSum + parseInt(Textar[b])
         }
-        var avg = avgofsum / (arrText.length - 1)
+        var avg = avgSum / (arrText.length - 1)
         sendTextMessage(sender, avg)
       }
     }
@@ -75,7 +53,28 @@ app.post('/webhook/', function (req, res) {
   res.sendStatus(200)
 })
 
+var token = 'EAAIwxSzOriIBACzvs1SsEZCq0tFmXHSDTs3smxARByXtVakr9MJ0rRuQ2RZAkxv8rO79CIcZCs0Kbds7ywTqsMkLQjXZAMT7ppDKcXbzc9P9ZCFpBaPcvN9TsXH8x274f5c5pM3IuxGZCcZCVnAKP36rtcnGC5Ykgdyg1EzVZAjNiAZDZD'
 
+function sendTextMessage (sender, text) {
+  var messageData = {
+    text: text
+  }
+  request({
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: { access_token: token },
+    method: 'POST',
+    json: {
+      recipient: { id: sender },
+      message: messageData
+    }
+  }, function (error, response, body) {
+    if (error) {
+      console.log('Error sending message: ', error)
+    } else if (response.body.error) {
+      console.log('Error: ', response.body.error)
+    }
+  })
+}
 
 app.set('port', (process.env.PORT || 5000))
 
