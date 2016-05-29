@@ -63,10 +63,10 @@ app.post('/webhook/', function (req, res) {
         }
       } else if (Textar[0] === 'avg') {
         var avgSum = 0
-        for (var b = 1; b < arrText.length; b++) {
+        for (var b = 1; b < Textar.length; b++) {
           avgSum = avgSum + parseInt(Textar[b])
         }
-        var avg = avgSum / (arrText.length - 1)
+        var avg = avgSum / (Textar.length - 1)
         sendTextMessage(sender, avg)
       }
     }
