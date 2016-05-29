@@ -2,7 +2,6 @@ var express = require('express')
 var bodyParser = require('body-parser')
 var request = require('request')
 var token = 'EAAIwxSzOriIBAKCK0l4wB8vMgfLuC9gChxW6PVhco3UM1ZAGAzpWmI48x3AveOjrUdN5IhZChE6ythZAMnesrswUcmzQugZCqoNk14oZCyzpOW7g6EwLko2LgomZCsAPZCzSlqMHZARZAUrKlckWW4YE7sC4RZCeR8qWnlcOQnZApe9UQZDZD'
-
 var app = express()
 
 app.use(bodyParser.json())
@@ -73,9 +72,6 @@ app.post('/webhook/', function (req, res) {
   }
   res.sendStatus(200)
 })
-
-
-
 
 app.set('port', (process.env.PORT || 5000))
 
