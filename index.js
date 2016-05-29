@@ -36,23 +36,39 @@ app.get('/webhook', function (req, res) {
   }
 });
 app.post('/webhook/', function (req, res) {
-  var messaging_events = req.body.entry[0].messaging;
+  var messaging_events = req.body.entry[0].messaging
   for (var i = 0; i < messaging_events.length; i++) {
-    var event = req.body.entry[0].messaging[i];
-    var sender = event.sender.id;
+    var event = req.body.entry[0].messaging[i]
+    var sender = event.sender.id
     if (event.message && event.message.text) {
-      var text = event.message.text.split(' ');
-          if (text[0] === 'sum') {
-            var ans = parseInt(text[1], 0) + parseInt(text[2], 0)
-            sendTextMessage(sender, ans)
-          } else if (text[0] === 'max') {
-            ans = parseInt(text[1], 0) > parseInt(text[2], 0) ? parseInt(text[1], 0) : parseInt(text[2], 0)
-            sendTextMessage(sender, ans)
-          } else if (text[0] === 'min') {
-            ans = parseInt(text[1], 0) < parseInt(text[2], 0) ? parseInt(text[1], 0) : parseInt(text[2], 0)
-            sendTextMessage(sender, ans)
+      var text = event.message.text
+      console.log(text, sender)
+      var arrText = text.split(' ')
+      if (arrText[0] === 'sum') {
+        var sum = parseInt(arrText[1]) + parseInt(arrText[2])
+        sendTextMessage(sender, sum + '')
+      } else if (arrText[0] === 'max') {
+        if (parseInt(arrText[1]) > parseInt(arrText[2])) {
+          sendTextMessage(sender, arrText[1])
+        } else {
+          sendTextMessage(sender, arrText[2])
+        }
+      } else if (arrText[0] === 'min') {
+        if (parseInt(arrText[1]) < parseInt(arrText[2])) {
+          sendTextMessage(sender, arrText[1])
+        } else {
+          sendTextMessage(sender, arrText[2])
+        }
+      } else if (arrText[0] === 'avg') {
+        var avgSum = 0
+        for (var b = 1; b < arrText.length; b++) {
+          avgSum = avgSum + parseInt(arrText[b])
+        }
+        var avg = avgSum / (arrText.length - 1)
+        sendTextMessage(sender, avg)
+      }
+    }
   }
-}
   res.sendStatus(200);
 });
 
